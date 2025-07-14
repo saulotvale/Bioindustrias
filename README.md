@@ -12,3 +12,4 @@ Fonte: https://dados.gov.br/dados/conjuntos-dados/cadastro-nacional-da-pessoa-ju
 7)	Realizar a adição dos códigos de natureza jurídica, CNAE e código de município do ibge no excel utilizando a fórmula PROCV e os arquivos presentes na base de CNPJs da receita federal, o excel foi utilizado dada o volume de dados, que aqui é mais ou menos 10k linhas.
 8)	Realizar mediante busca ativa e por rêferencias a verificação de critérios de sustentabilidade produzidos pela equipe do projeto
 O passo 6 pode ser realizado logo após  da junção, que ai deixa os arquivos mais leves.
+Se quiser colocar por extenso a lista de cnaes secundários só utilizar o código com esse nome, ele também pode ser adaptado para fazer isso com as outras colunas
