@@ -3,60 +3,59 @@ from tqdm import tqdm
 
 # Lista de CNAEs a serem filtrados
 lista_cnae = [
-    111301, 111302, 111399, 112101, 112102, 112199, 113000, 115600, 116402, 116499,
-    119901, 119902, 119905, 119906, 119907, 119908, 119999, 121101, 121102, 122900,
-    131800, 132600, 133401, 133402, 133403, 133404, 133405, 133406, 133407, 133408,
-    133409, 133410, 133499, 134200, 135100, 139303, 139304, 139305, 139306, 139399,
-    141501, 141502, 142300, 153902, 155505, 159801, 161099, 163600, 210101, 210102,
-    210103, 210104, 210106, 220903, 220904, 220905, 220999, 230600, 312403, 1031700,
-    1032501, 1032599, 1033301, 1033302, 1041400, 1042200, 1043100, 1051100, 1052000,
-    1053800, 1061901, 1061902, 1062700, 1063500, 1064300, 1065101, 1065102, 1066000,
-    1069400, 1071600, 1072401, 1081301, 1081302, 1082100, 1092900, 1093701, 1093702,
-    1094500, 1095300, 1099601, 1099602, 1099603, 1099605, 1099606, 1099607, 1099699,
-    1111901, 1111902, 1112700, 1113502, 1122401, 1122402, 1122403, 1122499, 1311100,
-    1312000, 1322700, 1340501, 1340599, 1353700, 1359600, 1412603, 1414200, 1422300,
-    1521100, 1539400, 1629302, 1931400, 1932200, 2012600, 2013401, 2013402, 2029100,
-    2062200, 2063100, 2110600, 2121101, 2121102, 2121103, 2122000, 2123800, 2219600,
-    2342702, 2349499, 2399101, 2399102, 159899, 210199, 1013902, 1340502, 1351100,
-    1352900, 1354500, 1510600, 1529700, 1540800, 2330303, 3212400, 3250705, 3291400,
-    3299006
+    "0111301", "0111302", "0111303", "0111399", "0112101", "0112102", "0112199", "0113000",
+    "0114800", "0115600", "0116401", "0116403", "0119901", "0119903", "0119904", "0119905",
+    "0119906", "0119907", "0119908", "0119999", "0121101", "0121102", "0122900", "0131800",
+    "0132600", "0133401", "0133402", "0133403", "0133404", "0133405", "0133406", "0133407",
+    "0133408", "0133409", "0133410", "0133411", "0133499", "0135100", "0139301", "0139302",
+    "0139303", "0139304", "0139305", "0139306", "0139399", "0141502", "0142300", "0151202",
+    "0151203", "0152102", "3091101", "3091102", "3092000", "3099700", "3101200", "3102100",
+    "3103900", "3104700", "3211601", "3211602", "3211603", "3212400", "3230200", "3240001",
+    "3240002", "3240099", "3250701", "3250702", "3250703", "3250704", "3250705", "3250706",
+    "3250707", "3250708", "3250709", "3291400", "3292201", "3292202", "3299001", "3299002",
+    "3299004", "3299005", "3299006", "3299099", "3311200", "3312101", "3312102", "3312103",
+    "3312104", "3313901", "3313902", "3313999", "3314701", "3314702", "3314703", "3314704",
+    "3314706", "3314707", "3314708", "3314709", "3314710", "3314711", "3314712", "3314713",
+    "3314714", "3314715", "3314716", "3314717", "3314718", "3314719", "3314720", "3314721",
+    "3314722", "3314799", "3316301", "3316302", "3317101", "3319800", "3321000", "3329501",
+    "3329599"
 ]
 
 def filtrar_linhas(input_csv, output_csv, cnae_lista, chunksize=100000):
-    # Criar arquivo de saída com cabeçalho
     with open(output_csv, 'w', encoding='utf-8', newline='') as f_out:
-        primeiro_chunk = True  # Para escrever o cabeçalho apenas no primeiro chunk
+        primeiro_chunk = True
         
-        # Ler o arquivo CSV em chunks
-        for chunk in tqdm(pd.read_csv(input_csv, encoding='utf-8', sep=';', header=None, 
-                                      low_memory=False, chunksize=chunksize), desc="Processando chunks"):
+        for chunk in tqdm(pd.read_csv(
+            input_csv,
+            encoding='utf-8',
+            sep=';',
+            header=None,
+            dtype={11: str},  # Forçar coluna 11 como string
+            low_memory=False,
+            chunksize=chunksize
+        ), desc="Processando chunks"):
             
-            # Remover espaços extras da coluna 12 (índice 11) e garantir que seja um número
-            chunk[11] = chunk[11].apply(lambda x: str(x).strip() if isinstance(x, str) else x)
+            # Limpar espaços e garantir formato
+            chunk[11] = chunk[11].str.strip()
 
-            # Converter os valores da coluna 12 para inteiro, se possível
-            chunk[11] = pd.to_numeric(chunk[11], errors='coerce')  # Converte para NaN caso não seja numérico
-
-            # Aplicar a condição de filtragem para CNAEs
+            # Aplicar filtro
             mask = chunk[11].isin(cnae_lista)
-
-            # Filtrar o chunk de acordo com a máscara
             chunk_filtrado = chunk[mask]
 
-            # Se houver dados filtrados, escrever no arquivo
             if not chunk_filtrado.empty:
-                chunk_filtrado.to_csv(f_out, index=False, header=primeiro_chunk, sep=';', encoding='utf-8', mode='a')
-                primeiro_chunk = False  # Apenas o primeiro chunk escreve o cabeçalho
+                chunk_filtrado.to_csv(f_out, index=False, header=primeiro_chunk,
+                                      sep=';', encoding='utf-8', mode='a')
+                primeiro_chunk = False
 
     print(f"Linhas filtradas salvas em {output_csv}")
 
+
 # Parâmetros
-input_csv = 'filtrado_estados.csv'
-output_csv = 'filtrado_ativo.csv'
+input_csv = 'estab_merged.csv'
+output_csv = 'estab_cnae.csv'
 
 # Executar
-filtrar_linhas(input_csv, output_csv, lista_cnae, chunksize=100000)  # 100 mil linhas por chunk
-
+filtrar_linhas(input_csv, output_csv, lista_cnae, chunksize=100000)
 
 
 
