@@ -1,0 +1,39 @@
+Metodologia para Avaliação de Bioindústrias e Exportações
+
+A metodologia adotada para avaliar a relação entre bioindústrias e exportações consistiu nas seguintes etapas:
+
+Coleta de dados de exportação
+
+Foram obtidos os dados da Comex referentes ao ano de análise, com o objetivo de identificar impactos indiretos sobre os produtos exportados.
+
+(Incluir link da base aqui)
+
+Base de empresas autorizadas a atuar no comércio exterior
+
+Foram coletadas informações sobre intervenientes aduaneiros, incluindo nomes e CNPJs das empresas.
+
+(Incluir link da base aqui)
+
+Nomenclatura Comum do Mercosul (NCM)
+
+A nomenclatura da NCM foi utilizada para identificar a origem e a classificação dos produtos exportados.
+
+Identificação de bioprodutos
+
+Foram selecionados os produtos classificados como bioprodutos segundo o conceito adotado no estudo, incluindo produtos biológicos e excluindo aqueles provenientes de pecuária, monoculturas intensivas ou extração de madeira.
+
+Cruzamento de CNPJs
+
+Foi realizada a correspondência entre os CNPJs das bioindústrias e os CNPJs da base de intervenientes aduaneiros, considerando o CNPJ raiz.
+
+Criou-se uma variável indicadora de correspondência: 0 = não corresponde; 1 = corresponde.
+
+Cruzamento CNAE–NCM
+
+Verificou-se a relação entre os CNAEs das bioindústrias e os códigos da NCM selecionados.
+
+Criou-se uma variável indicadora de correspondência: 0 = não corresponde; 1 = corresponde.
+
+Análise de valores e volumes exportados
+
+Para quantificação de valores e volumes, utilizaram-se os dados da Comex, considerando apenas os registros com correspondência confirmada.
