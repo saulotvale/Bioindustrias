@@ -2,37 +2,53 @@ Metodologia para Avaliação de Bioindústrias e Exportações
 
 A metodologia adotada para avaliar a relação entre bioindústrias e exportações consistiu nas seguintes etapas:
 
-Coleta de dados de exportação
+1. Coleta de dados de exportação
 
 Foram obtidos os dados da Comex referentes ao ano de análise, com o objetivo de identificar impactos indiretos sobre os produtos exportados.
 
-(Incluir link da base aqui)
+Fonte: Base de dados bruta Comex
 
-Base de empresas autorizadas a atuar no comércio exterior
+2. Base de empresas autorizadas a atuar no comércio exterior
 
 Foram coletadas informações sobre intervenientes aduaneiros, incluindo nomes e CNPJs das empresas.
 
-(Incluir link da base aqui)
+Fonte: Intervenientes aduaneiros - Dados.gov.br
 
-Nomenclatura Comum do Mercosul (NCM)
+3. Nomenclatura Comum do Mercosul (NCM)
 
-A nomenclatura da NCM foi utilizada para identificar a origem e a classificação dos produtos exportados.
+A NCM foi utilizada para identificar a origem e a classificação dos produtos exportados.
 
-Identificação de bioprodutos
+4. Identificação de bioprodutos
 
-Foram selecionados os produtos classificados como bioprodutos segundo o conceito adotado no estudo, incluindo produtos biológicos e excluindo aqueles provenientes de pecuária, monoculturas intensivas ou extração de madeira.
+Foram selecionados os produtos classificados como bioprodutos segundo o conceito adotado no estudo.
 
-Cruzamento de CNPJs
+Critérios de exclusão:
 
-Foi realizada a correspondência entre os CNPJs das bioindústrias e os CNPJs da base de intervenientes aduaneiros, considerando o CNPJ raiz.
+Produtos provenientes de pecuária
 
-Criou-se uma variável indicadora de correspondência: 0 = não corresponde; 1 = corresponde.
+Monoculturas intensivas
 
-Cruzamento CNAE–NCM
+Extração de madeira
+
+5. Cruzamento de CNPJs
+
+Realizou-se a correspondência entre os CNPJs das bioindústrias e os CNPJs da base de intervenientes aduaneiros, considerando o CNPJ raiz.
+
+Criou-se uma variável indicadora de correspondência:
+
+0 = não corresponde
+
+1 = corresponde
+
+6. Cruzamento CNAE–NCM
 
 Verificou-se a relação entre os CNAEs das bioindústrias e os códigos da NCM selecionados.
 
-Criou-se uma variável indicadora de correspondência: 0 = não corresponde; 1 = corresponde.
+Criou-se uma variável indicadora de correspondência:
+
+0 = não corresponde
+
+1 = corresponde
 
 Análise de valores e volumes exportados
 
