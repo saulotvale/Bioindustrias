@@ -1,0 +1,106 @@
+Código para produzir a estimativa de empregos a partir da base.
+A metodologia escolhida foi:
+# Estimativa de Empregos Diretos e Indiretos
+
+Este script realiza uma estimativa de empregos diretos e indiretos a partir de uma base de dados de empresas da Amazônia Legal. A análise considera porte, capital social, natureza jurídica, MEI e matriz/filial, aplicando regras específicas para cada situação.
+
+---
+
+## 1. Carregamento e Preparação da Base
+- Arquivo: `Base 2.3 junho 2025.xlsx`
+- Garantir que a coluna `capital` seja numérica, substituindo valores inválidos por 0.
+- Normalização da coluna `porte` para os três rótulos consistentes:
+  - `Microempresa`
+  - `Empresa de Pequeno Porte` (EPP)
+  - `Demais` (média e grande empresa)
+
+---
+
+## 2. Inicialização das Colunas
+- `empregos_diretos` inicializada com `NaN`, garantindo que somente regras aplicadas preencham valores.
+- `empregos_indiretos` será calculada posteriormente como `empregos_diretos * 4`.
+
+---
+
+## 3. Regra MEI
+- Empresas com `mei == "S"` recebem **2 empregos diretos fixos**.
+- **Nunca** são alteradas por outras regras ou quantis.
+
+---
+
+## 4. Filiais
+- Empresas com `matriz_filial == 2` recebem valores fixos, independente do capital social:
+  - Microempresa → 5 empregos
+  - EPP → 10 empregos
+  - Demais → 100 empregos
+
+---
+
+## 5. Microempresa Matriz com Capital 0
+- Microempresas matrizes (`matriz_filial == 1` e `mei != "S"`) com capital social igual a 0 recebem **1 emprego**.
+
+---
+
+## 6. Associação Privada
+- Empresas de natureza jurídica `"Associação Privada"`:
+  - Máximo de 20 empregos
+  - Mínimo de 10 empregos, para evitar zero
+
+---
+
+## 7. Quantis por Porte e Estado
+- Aplicado somente para **matrizes, não-MEI, capital > 0**
+- Quantis calculados dentro de cada **UF** e **porte**:
+  - **Microempresa** → [1, 5, 10, 20]
+  - **EPP** → [10, 20, 40, 100]
+  - **Demais** → [50, 100, 200, 300]
+- Faixas definidas pelos quartis:
+  - Q1 (até 25%) → primeiro valor
+  - Q2 (25%–50%) → segundo valor
+  - Q3 (50%–75%) → terceiro valor
+  - Q4 (>75%) → quarto valor
+- Empresas com capital 0 recebem automaticamente **o valor mínimo do porte**.
+
+---
+
+## 8. Cooperativas
+- Empresas com `natjjud_extenso == "Cooperativa"`:
+  - Micro e EPP → mínimo 20 empregos
+  - Demais → já possuem valor mínimo alto, mantido
+
+---
+
+## 9. Blindagem de Limites
+- Garante que nenhum valor ultrapasse os limites definidos por porte:
+  - **Microempresa:** {1, 5, 10, 20} + 2 para MEI + 5 para filial
+  - **EPP:** {10, 20, 40, 100} + 10 para filial
+  - **Demais:** {50, 100, 200, 300} + 100 para filial
+  - **Associação privada:** máximo 20, mínimo 10
+
+---
+
+## 10. Empregos Indiretos
+- Calculados como `empregos_diretos * 4`, considerando o tamanho médio de uma família brasileira.
+
+---
+
+## 11. Exportação
+- **Arquivo detalhado:** `Resultado_empregos_detalhado_final.xlsx` → linha por empresa
+- **Arquivo agregado por município:** `Resultado_empregos_por_municipio_final.xlsx` → total de empregos diretos e indiretos  
+  Agrupado por `cod7_ibge`, `munic_extenso` e `uf`.
+
+---
+
+## 12. Resumo das Regras de Negócio
+1. **MEI → 2 empregos fixos**  
+2. **Filiais → peso fixo por porte**  
+3. **Micro com capital 0 → mínimo 1 emprego**  
+4. **Capital social > 0 → quantis por porte e UF**  
+5. **Cooperativa → mínimo 20 empregos**  
+6. **Associação privada → máximo 20, mínimo 10**  
+7. **Blindagem final → garante limites máximos e mínimos**  
+8. **Empregos indiretos → x4**
+
+---
+
+Este fluxo garante que cada empresa da base receba uma estimativa consistente de empregos, respeitando porte, capital social, natureza jurídica e tipo de empresa (MEI, filial ou matriz).
